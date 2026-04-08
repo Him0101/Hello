@@ -1,0 +1,95 @@
+{
+  "theme": "light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "domain": "AI Platform / Tech Startup",
+  "colors": {
+    "background": "#FFFFFF",
+    "surface": "#FAFAFA",
+    "primary_text": "#09090B",
+    "secondary_text": "#52525B",
+    "accent_saffron": "#FF9933",
+    "accent_green": "#138808",
+    "cta_background": "#09090B",
+    "cta_text": "#FFFFFF",
+    "cta_hover": "#27272A",
+    "border": "rgba(0, 0, 0, 0.08)",
+    "glass_bg": "rgba(255, 255, 255, 0.7)"
+  },
+  "typography": {
+    "headings_font": "Outfit",
+    "body_font": "Manrope",
+    "rules": [
+      "Import fonts via Google Fonts: Outfit (wght 300 to 700) and Manrope (wght 400 to 600).",
+      "Headlines MUST use tracking-tight or tracking-tighter.",
+      "Max hero heading size is text-5xl md:text-6xl with fluid clamp.",
+      "Overlines MUST be uppercase, tiny, wide spacing (tracking-[0.2em]).",
+      "Do NOT use Inter, Roboto, or standard defaults."
+    ]
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Generous (p-8, p-12, py-24)",
+    "container_width": "max-w-7xl mx-auto px-6 md:px-12",
+    "grid_strategy": "Mobile-first grids, large gaps (gap-8, gap-12)",
+    "header_style": "Crystal Glassmorphism: backdrop-blur-xl bg-white/70 border-b border-black/5, sticky top-0 z-50."
+  },
+  "components": {
+    "Topbar": {
+      "description": "Fixed header (z-50). Logo on left. 'Platform' dropdown trigger in center. 'Experience Sarvbhasa' CTA on right.",
+      "styling": "Use pure HTML/Tailwind. Flexbox, justify-between, items-center, h-20."
+    },
+    "PlatformDropdown": {
+      "description": "Mega menu overlay. Triggers when 'Platform' is clicked. Must blur the rest of the screen below the header.",
+      "styling": "Position fixed below header (top-20 inset-x-0 bottom-0). Background: backdrop-blur-md bg-white/60. Menu panel itself should be a crisp white container dropping from the top with shadow-xl border-b border-border/40. Contains two columns: 'About Sarvbhasa API' (Uses Sarvam Maurya API) and 'Languages Translate' (List: Marathi, Gujarati, Hindi, English, Malayalam)."
+    },
+    "HeroSection": {
+      "description": "Bold, clean, authoritative section. Headline: \"India's Sovereign AI Platform\". Subheadline: \"AI that speaks every language\". Main CTA: \"Experience Sarvbhasa\".",
+      "styling": "Center or slightly asymmetric alignment. Use 'hero_bg_tricolor' as an absolute -z-10 full-cover image with object-cover, OR use subtle CSS radial gradients with accent_saffron and accent_green at the far edges of the screen."
+    },
+    "LoadingAnimation": {
+      "description": "Triggered by CTA. Shows centered square logo, 'SARVBHASA' text, and a directional loading arrow. 2 seconds duration.",
+      "styling": "Fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white. Smooth fade in via framer-motion."
+    },
+    "ChatbotInterface": {
+      "description": "Simple chatbot interface shown after loading. Standard layout.",
+      "styling": "Max-w-4xl mx-auto h-[calc(100vh-5rem)]. Message list area taking remaining height. Input area fixed at bottom inside container. Use Shadcn Input/Button. Clean borders."
+    }
+  },
+  "interactions_and_motion": {
+    "dropdown": "Smooth opacity and y-translate via framer-motion (AnimatePresence).",
+    "loading_transition": "When CTA clicked, state changes to 'loading'. Framer-motion fades in full white screen. setTimeout for 2000ms changes state to 'chatbot'.",
+    "hover_states": "Buttons MUST have distinct hover states (hover:bg-zinc-800). Nav links must change color on hover.",
+    "library": "framer-motion"
+  },
+  "media": {
+    "logo_url": "https://customer-assets.emergentagent.com/job_india-ai-platform-2/artifacts/3x5chxm4_Multilingual.png",
+    "hero_bg_tricolor": "https://static.prod-images.emergentagent.com/jobs/503166d7-4d51-4d1d-b65f-7e9554796752/images/564409bb8e808faf7fd3c28ce467777afa252beea13cd2094b46a1441d665ab7.png",
+    "ai_node_icon": "https://static.prod-images.emergentagent.com/jobs/503166d7-4d51-4d1d-b65f-7e9554796752/images/127956fb27e12c22f854fdbc7acf424e2c0efffa35955b88dfdf5f362c6b9bef.png",
+    "user_avatar": "https://static.prod-images.emergentagent.com/jobs/503166d7-4d51-4d1d-b65f-7e9554796752/images/a1ea70de2b472683ad014fef727a326d27f6d885387992f1b26df4b90a7e06be.png"
+  },
+  "accessibility_and_testing": {
+    "data_testids": [
+      "nav-platform-dropdown-trigger",
+      "nav-cta-btn",
+      "hero-cta-btn",
+      "dropdown-about-api",
+      "dropdown-languages",
+      "loading-screen",
+      "chatbot-interface",
+      "chatbot-input",
+      "chatbot-submit-btn"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. Setup state management for view routing: const [currentView, setCurrentView] = useState('landing'). Views: 'landing', 'loading', 'chatbot'.",
+    "2. Install 'framer-motion' for all animations, and 'lucide-react' for icons.",
+    "3. Fetch fonts 'Outfit' and 'Manrope' in index.html or global CSS and assign correctly in tailwind config.",
+    "4. Topbar component MUST use 'backdrop-blur-xl bg-white/70' glass effect.",
+    "5. Platform Dropdown MUST overlay the main content, blurring the background ('backdrop-blur-md bg-white/40'). The menu itself should be a clean white panel dropping from top. It must contain the specific sub-items requested.",
+    "6. Main Hero section should be highly minimal. Use 'hero_bg_tricolor' image absolutely positioned and opacity-30, OR use CSS radial gradients with the Saffron and Green accent colors strictly to hint at the Indian tricolor without overwhelming.",
+    "7. When 'Experience Sarvbhasa' is clicked, immediately setView('loading'). Mount the loading screen (framer-motion fade in) with the centered logo, text, and directional arrow. Trigger setTimeout for 2000ms, then setView('chatbot').",
+    "8. Build a clean Simple Chatbot Interface for the final state.",
+    "9. MUST include data-testid attributes for all interactive elements as defined in accessibility_and_testing.",
+    "10. Do NOT use placeholder text or dummy image services. ONLY use media URLs provided in this JSON.",
+    "11. Ensure styling matches Archetype 4 (Swiss & High-Contrast) - thin clean borders, massive typography, very generous spacing, no heavy drop shadows, no colorful gradients besides the subtle tricolor accents."
+  ]
+}
