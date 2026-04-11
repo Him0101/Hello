@@ -78,6 +78,21 @@ export default function HeroSection({ onExperience }) {
           AI that speaks every language
         </motion.p>
 
+        {/* Hindi Tagline */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-4"
+        >
+          <p className="font-heading text-lg md:text-xl font-semibold text-saffron tracking-tight">
+            भाषा बदले, मतलब नहीं.
+          </p>
+          <p className="font-body text-sm text-zinc-400 mt-1">
+            Language Changes, Meaning Doesn't.
+          </p>
+        </motion.div>
+
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}

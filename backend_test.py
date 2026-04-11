@@ -105,6 +105,32 @@ class SarvbhasaAPITester:
                 return False
         return False
 
+    def test_translate_endpoint(self):
+        """Test the translate endpoint"""
+        test_data = {
+            "text": "Hello",
+            "source_language": "en",
+            "target_language": "hi"
+        }
+        success, response = self.run_test(
+            "Translate Endpoint",
+            "POST",
+            "api/translate",
+            200,
+            data=test_data
+        )
+        
+        if success:
+            # Verify response structure
+            if "translated_text" in response and "source_language" in response and "target_language" in response:
+                print(f"✅ Translate response structure is correct")
+                print(f"Translation: '{test_data['text']}' -> '{response['translated_text']}'")
+                return True
+            else:
+                print(f"❌ Translate response structure is incorrect: {response}")
+                return False
+        return False
+
     def test_status_endpoints(self):
         """Test status check endpoints"""
         # Test POST status
@@ -153,6 +179,7 @@ def main():
     tests = [
         tester.test_root_endpoint,
         tester.test_chat_endpoint,
+        tester.test_translate_endpoint,
         tester.test_status_endpoints
     ]
 

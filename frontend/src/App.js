@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import "@/App.css";
 import Topbar from "@/components/Topbar";
 import HeroSection from "@/components/HeroSection";
 import LoadingScreen from "@/components/LoadingScreen";
-import ChatbotInterface from "@/components/ChatbotInterface";
+import MainApp from "@/components/MainApp";
 import { AnimatePresence } from "framer-motion";
 
 function App() {
   const [currentView, setCurrentView] = useState("landing");
 
-  const handleExperience = () => {
+  const handleExperience = useCallback(() => {
     setCurrentView("loading");
     setTimeout(() => {
-      setCurrentView("chatbot");
+      setCurrentView("app");
     }, 2000);
-  };
+  }, []);
 
-  const handleBackToLanding = () => {
+  const handleBackToLanding = useCallback(() => {
     setCurrentView("landing");
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -29,13 +29,11 @@ function App() {
             <HeroSection onExperience={handleExperience} />
           </div>
         )}
-
         {currentView === "loading" && (
           <LoadingScreen key="loading" />
         )}
-
-        {currentView === "chatbot" && (
-          <ChatbotInterface key="chatbot" onBack={handleBackToLanding} />
+        {currentView === "app" && (
+          <MainApp key="app" onBack={handleBackToLanding} />
         )}
       </AnimatePresence>
     </div>
