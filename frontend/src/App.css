@@ -1,19 +1,33 @@
 /* Sarvbhasa App Styles */
 
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 @keyframes pulse-arrow {
   0%, 100% { opacity: 0.4; transform: translateX(0); }
   50% { opacity: 1; transform: translateX(6px); }
 }
 
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
 .animate-pulse-arrow {
   animation: pulse-arrow 1s ease-in-out infinite;
+}
+
+/* Tricolor gradient accent bar */
+.tricolor-bar {
+  background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 35%, #FFFFFF 65%, #138808 100%);
+}
+
+.tricolor-gradient {
+  background: linear-gradient(135deg, rgba(255,153,51,0.06) 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0.9) 60%, rgba(19,136,8,0.06) 100%);
+}
+
+/* Language background image styling */
+.lang-bg-image {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  filter: blur(2px);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
 }

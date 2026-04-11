@@ -85,13 +85,17 @@ class SarvbhasaAPITester:
 
     def test_chat_endpoint(self):
         """Test the chat endpoint with a sample message"""
-        test_message = "Hello, can you help me with translation?"
+        test_message = "Hello, how are you?"
         success, response = self.run_test(
             "Chat Endpoint",
             "POST",
             "api/chat",
             200,
-            data={"message": test_message}
+            data={
+                "message": test_message,
+                "language": "en-IN",
+                "target_language": "hi-IN"
+            }
         )
         
         if success:
@@ -109,8 +113,8 @@ class SarvbhasaAPITester:
         """Test the translate endpoint"""
         test_data = {
             "text": "Hello",
-            "source_language": "en",
-            "target_language": "hi"
+            "source_language": "en-IN",
+            "target_language": "hi-IN"
         }
         success, response = self.run_test(
             "Translate Endpoint",
@@ -131,27 +135,16 @@ class SarvbhasaAPITester:
                 return False
         return False
 
-    def test_status_endpoints(self):
-        """Test status check endpoints"""
-        # Test POST status
-        test_data = {"client_name": f"test_client_{datetime.now().strftime('%H%M%S')}"}
-        success_post, response_post = self.run_test(
-            "Create Status Check",
-            "POST",
-            "api/status",
-            200,
-            data=test_data
-        )
-        
-        # Test GET status
-        success_get, response_get = self.run_test(
-            "Get Status Checks",
+    def test_auth_endpoints(self):
+        """Test auth endpoints"""
+        # Test auth/me endpoint (should return 401 without auth)
+        success, response = self.run_test(
+            "Auth Me Endpoint (Unauthenticated)",
             "GET",
-            "api/status",
-            200
+            "api/auth/me",
+            401
         )
-        
-        return success_post and success_get
+        return success
 
     def print_summary(self):
         """Print test summary"""
@@ -178,9 +171,9 @@ def main():
     # Run all tests
     tests = [
         tester.test_root_endpoint,
-        tester.test_chat_endpoint,
         tester.test_translate_endpoint,
-        tester.test_status_endpoints
+        tester.test_chat_endpoint,
+        tester.test_auth_endpoints
     ]
 
     all_passed = True

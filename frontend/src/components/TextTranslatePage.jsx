@@ -1,34 +1,32 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeftRight, Copy, Check, Volume2 } from "lucide-react";
+import { ArrowLeftRight, Copy, Check, Volume2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
-
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_india-ai-platform-2/artifacts/3x5chxm4_Multilingual.png";
 
 const LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "hi", label: "Hindi" },
-  { code: "mr", label: "Marathi" },
-  { code: "gu", label: "Gujarati" },
-  { code: "bn", label: "Bengali" },
-  { code: "kn", label: "Kannada" },
-  { code: "ml", label: "Malayalam" },
+  { code: "en-IN", label: "English" },
+  { code: "hi-IN", label: "Hindi" },
+  { code: "mr-IN", label: "Marathi" },
+  { code: "gu-IN", label: "Gujarati" },
+  { code: "bn-IN", label: "Bengali" },
+  { code: "kn-IN", label: "Kannada" },
+  { code: "ml-IN", label: "Malayalam" },
+  { code: "ta-IN", label: "Tamil" },
+  { code: "te-IN", label: "Telugu" },
+  { code: "pa-IN", label: "Punjabi" },
+  { code: "od-IN", label: "Odia" },
+  { code: "as-IN", label: "Assamese" },
 ];
 
 export default function TextTranslatePage() {
-  const [sourceLang, setSourceLang] = useState("en");
-  const [targetLang, setTargetLang] = useState("hi");
+  const [sourceLang, setSourceLang] = useState("en-IN");
+  const [targetLang, setTargetLang] = useState("hi-IN");
   const [sourceText, setSourceText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
   const [isTranslating, setIsTranslating] = useState(false);
@@ -38,16 +36,11 @@ export default function TextTranslatePage() {
     if (!sourceText.trim()) return;
     setIsTranslating(true);
     setTranslatedText("");
-
     try {
       const res = await fetch(`${API}/translate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: sourceText,
-          source_language: sourceLang,
-          target_language: targetLang,
-        }),
+        body: JSON.stringify({ text: sourceText, source_language: sourceLang, target_language: targetLang }),
       });
       const data = await res.json();
       setTranslatedText(data.translated_text);
@@ -57,7 +50,7 @@ export default function TextTranslatePage() {
     setIsTranslating(false);
   };
 
-  const handleSwapLanguages = () => {
+  const handleSwap = () => {
     setSourceLang(targetLang);
     setTargetLang(sourceLang);
     setSourceText(translatedText);
@@ -74,159 +67,91 @@ export default function TextTranslatePage() {
 
   const handleSpeak = (text, lang) => {
     if (!text) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang === "en" ? "en-IN" : lang === "hi" ? "hi-IN" : lang === "mr" ? "mr-IN" : lang === "gu" ? "gu-IN" : lang === "bn" ? "bn-IN" : lang === "kn" ? "kn-IN" : "ml-IN";
-    speechSynthesis.speak(utterance);
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    speechSynthesis.speak(u);
   };
 
   return (
     <div className="h-full overflow-y-auto" data-testid="text-translate-page">
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-8">
+      <div className="max-w-5xl mx-auto px-5 md:px-10 py-6">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="font-heading text-2xl font-bold tracking-tight text-zinc-900">
-              Text Translate
-            </h1>
-            <p className="font-body text-sm text-zinc-400 mt-1">Translate between Indian languages</p>
+            <h1 className="font-heading text-xl font-bold tracking-tight text-zinc-900">Text Translate</h1>
+            <p className="font-body text-[11px] text-zinc-400 mt-0.5">Translate between Indian languages using Sarvam AI</p>
           </div>
           <div className="flex items-center gap-2">
-            <img src={LOGO_URL} alt="" className="h-8 w-8 object-contain" />
-            <span className="font-heading text-sm font-semibold text-zinc-900">Sarvbhasa</span>
+            <img src={LOGO_URL} alt="" className="h-7 w-7 object-contain" />
+            <span className="font-heading text-[13px] font-semibold text-zinc-900">Sarvbhasa</span>
           </div>
         </motion.div>
 
         {/* Language Selectors */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="flex items-center gap-3 mb-6"
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex items-center gap-3 mb-5">
           <div className="flex-1">
-            <label className="text-xs font-body font-medium text-zinc-400 uppercase tracking-wider mb-1.5 block">
-              A — Source Language
-            </label>
+            <label className="text-[10px] font-body font-semibold text-saffron uppercase tracking-wider mb-1 block">A — Source</label>
             <Select value={sourceLang} onValueChange={setSourceLang}>
-              <SelectTrigger className="w-full rounded-lg border-zinc-200 bg-zinc-50 font-body" data-testid="translate-source-lang">
+              <SelectTrigger className="w-full rounded-lg border-zinc-200 bg-zinc-50 font-body text-[13px]" data-testid="translate-source-lang">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-
-          <button
-            data-testid="translate-swap-btn"
-            onClick={handleSwapLanguages}
-            className="mt-5 p-2 rounded-full border border-zinc-200 hover:bg-zinc-50 transition-colors"
-          >
-            <ArrowLeftRight className="w-4 h-4 text-zinc-500" />
+          <button data-testid="translate-swap-btn" onClick={handleSwap}
+            className="mt-5 p-2 rounded-full border border-saffron/30 hover:bg-saffron/5 transition-colors">
+            <ArrowLeftRight className="w-4 h-4 text-saffron" />
           </button>
-
           <div className="flex-1">
-            <label className="text-xs font-body font-medium text-zinc-400 uppercase tracking-wider mb-1.5 block">
-              B — Target Language
-            </label>
+            <label className="text-[10px] font-body font-semibold text-india-green uppercase tracking-wider mb-1 block">B — Target</label>
             <Select value={targetLang} onValueChange={setTargetLang}>
-              <SelectTrigger className="w-full rounded-lg border-zinc-200 bg-zinc-50 font-body" data-testid="translate-target-lang">
+              <SelectTrigger className="w-full rounded-lg border-zinc-200 bg-zinc-50 font-body text-[13px]" data-testid="translate-target-lang">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
-                ))}
-              </SelectContent>
+              <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>)}</SelectContent>
             </Select>
           </div>
         </motion.div>
 
         {/* Text Areas */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-4 mb-6"
-        >
-          {/* Source */}
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="grid md:grid-cols-2 gap-4 mb-5">
           <div className="relative">
-            <Textarea
-              data-testid="translate-source-text"
-              value={sourceText}
-              onChange={(e) => setSourceText(e.target.value)}
-              placeholder="Enter text to translate..."
-              className="min-h-[200px] md:min-h-[280px] rounded-xl border-zinc-200 bg-zinc-50 font-body text-sm resize-none p-4"
-            />
-            <div className="absolute bottom-3 right-3 flex gap-1">
-              <button
-                onClick={() => handleSpeak(sourceText, sourceLang)}
-                className="p-1.5 rounded-lg hover:bg-zinc-200 transition-colors"
-                data-testid="translate-source-speak-btn"
-                title="Listen"
-              >
-                <Volume2 className="w-4 h-4 text-zinc-400" />
+            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-xl bg-gradient-to-r from-saffron to-saffron/30" />
+            <Textarea data-testid="translate-source-text" value={sourceText} onChange={(e) => setSourceText(e.target.value)}
+              placeholder="Enter text to translate..." className="min-h-[220px] md:min-h-[300px] rounded-xl border-zinc-200 bg-zinc-50 font-body text-[13px] resize-none p-4 pt-5" />
+            <div className="absolute bottom-2.5 right-3 flex gap-1">
+              <button onClick={() => handleSpeak(sourceText, sourceLang)} className="p-1 rounded hover:bg-zinc-200 transition-colors" data-testid="translate-source-speak-btn">
+                <Volume2 className="w-3.5 h-3.5 text-zinc-400" />
               </button>
             </div>
-            <p className="text-[11px] font-body text-zinc-300 mt-1 text-right">
-              {sourceText.length} characters
-            </p>
+            <p className="text-[10px] font-body text-zinc-300 mt-1 text-right">{sourceText.length} chars</p>
           </div>
-
-          {/* Target */}
           <div className="relative">
-            <Textarea
-              data-testid="translate-output-text"
-              value={isTranslating ? "Translating..." : translatedText}
-              readOnly
-              placeholder="Translation will appear here..."
-              className="min-h-[200px] md:min-h-[280px] rounded-xl border-zinc-200 bg-white font-body text-sm resize-none p-4"
-            />
-            <div className="absolute bottom-3 right-3 flex gap-1">
-              <button
-                onClick={handleCopy}
-                className="p-1.5 rounded-lg hover:bg-zinc-100 transition-colors"
-                data-testid="translate-copy-btn"
-                title="Copy"
-              >
-                {copied ? <Check className="w-4 h-4 text-india-green" /> : <Copy className="w-4 h-4 text-zinc-400" />}
+            <div className="absolute top-0 left-0 right-0 h-1 rounded-t-xl bg-gradient-to-r from-india-green/30 to-india-green" />
+            <Textarea data-testid="translate-output-text" value={isTranslating ? "" : translatedText} readOnly
+              placeholder="Translation will appear here..." className="min-h-[220px] md:min-h-[300px] rounded-xl border-zinc-200 bg-white font-body text-[13px] resize-none p-4 pt-5" />
+            {isTranslating && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-xl">
+                <Loader2 className="w-6 h-6 text-india-green animate-spin" />
+              </div>
+            )}
+            <div className="absolute bottom-2.5 right-3 flex gap-1">
+              <button onClick={handleCopy} disabled={!translatedText} className="p-1 rounded hover:bg-zinc-100 transition-colors disabled:opacity-30" data-testid="translate-copy-btn">
+                {copied ? <Check className="w-3.5 h-3.5 text-india-green" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
               </button>
-              <button
-                onClick={() => handleSpeak(translatedText, targetLang)}
-                className="p-1.5 rounded-lg hover:bg-zinc-100 transition-colors"
-                data-testid="translate-target-speak-btn"
-                title="Listen"
-              >
-                <Volume2 className="w-4 h-4 text-zinc-400" />
+              <button onClick={() => handleSpeak(translatedText, targetLang)} className="p-1 rounded hover:bg-zinc-100 transition-colors" data-testid="translate-target-speak-btn">
+                <Volume2 className="w-3.5 h-3.5 text-zinc-400" />
               </button>
             </div>
-            <p className="text-[11px] font-body text-zinc-300 mt-1 text-right">
-              {translatedText.length} characters
-            </p>
+            <p className="text-[10px] font-body text-zinc-300 mt-1 text-right">{translatedText.length} chars</p>
           </div>
         </motion.div>
 
         {/* Translate Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex justify-center"
-        >
-          <Button
-            data-testid="translate-submit-btn"
-            onClick={handleTranslate}
-            disabled={!sourceText.trim() || isTranslating}
-            size="lg"
-            className="rounded-full px-10 py-6 bg-zinc-900 hover:bg-zinc-700 text-white font-body text-sm font-medium disabled:opacity-30 transition-colors"
-          >
-            {isTranslating ? "Translating..." : "Translate"}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex justify-center">
+          <Button data-testid="translate-submit-btn" onClick={handleTranslate} disabled={!sourceText.trim() || isTranslating} size="lg"
+            className="rounded-full px-10 py-5 bg-gradient-to-r from-saffron to-india-green hover:opacity-90 text-white font-body text-[13px] font-medium disabled:opacity-30 transition-opacity">
+            {isTranslating ? <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Translating...</> : "Translate"}
           </Button>
         </motion.div>
       </div>
