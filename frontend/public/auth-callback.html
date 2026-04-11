@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html><head><title>Signing in...</title></head>
+<body>
+<script>
+  // Extract session_id from hash
+  var hash = window.location.hash;
+  var match = hash.match(/session_id=([^&]+)/);
+  if (match && match[1]) {
+    // Send session_id to parent window
+    if (window.opener) {
+      window.opener.postMessage({ type: "google-auth-callback", session_id: match[1] }, "*");
+    }
+  }
+  window.close();
+</script>
+<p style="font-family:sans-serif;text-align:center;margin-top:40px;color:#666">Signing you in...</p>
+</body></html>

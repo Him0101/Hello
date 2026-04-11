@@ -12,35 +12,52 @@ function App() {
   const [currentView, setCurrentView] = useState("landing");
   const [user, setUser] = useState(null);
 
-  // Hide any external badge
+  // Hide external badge
   useEffect(() => {
-    const hide = () => {
-      const badge = document.getElementById("emergent-badge");
-      if (badge) badge.remove();
-    };
+    const hide = () => { const b = document.getElementById("emergent-badge"); if (b) b.remove(); };
     hide();
-    const observer = new MutationObserver(hide);
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+    const obs = new MutationObserver(hide);
+    obs.observe(document.body, { childList: true, subtree: true });
+    return () => obs.disconnect();
   }, []);
 
-  // Check for payment redirect
+  // Check payment redirect
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("session_id")) {
-      setCurrentView("app");
-    }
+    const p = new URLSearchParams(window.location.search);
+    if (p.get("session_id")) setCurrentView("app");
   }, []);
 
   // Check existing session
   useEffect(() => {
-    const checkAuth = async () => {
+    (async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/auth/me`, { credentials: "include" });
-        if (res.ok) setUser(await res.json());
+        const r = await fetch(`${BACKEND_URL}/api/auth/me`, { credentials: "include" });
+        if (r.ok) setUser(await r.json());
       } catch {}
+    })();
+  }, []);
+
+  // Listen for Google OAuth popup callback
+  useEffect(() => {
+    const handler = async (e) => {
+      if (e.data?.type === "google-auth-callback" && e.data?.session_id) {
+        try {
+          const r = await fetch(`${BACKEND_URL}/api/auth/google`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ session_id: e.data.session_id }),
+          });
+          if (r.ok) {
+            const userData = await r.json();
+            setUser(userData);
+            setCurrentView("app");
+          }
+        } catch {}
+      }
     };
-    checkAuth();
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
   }, []);
 
   const handleExperience = useCallback(() => {
@@ -64,13 +81,7 @@ function App() {
         )}
         {currentView === "loading" && <LoadingScreen key="loading" />}
         {currentView === "app" && (
-          <MainApp
-            key="app"
-            onBack={() => setCurrentView("landing")}
-            user={user}
-            setUser={setUser}
-            onLogout={handleLogout}
-          />
+          <MainApp key="app" onBack={() => setCurrentView("landing")} user={user} setUser={setUser} onLogout={handleLogout} />
         )}
       </AnimatePresence>
     </div>

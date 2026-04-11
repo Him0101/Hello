@@ -88,10 +88,12 @@ class SarvbhasaAPITester:
 
     def test_register_new_user(self):
         """Test user registration"""
+        # Use a unique email with timestamp to avoid conflicts
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         test_data = {
-            "name": "TestUser",
-            "email": "test123@test.com",
-            "password": "Test@123456"
+            "name": "TestBot",
+            "email": f"testbot_{timestamp}@test.com",
+            "password": "TestBot@123"
         }
         success, response = self.run_test(
             "User Registration",
@@ -257,22 +259,22 @@ class SarvbhasaAPITester:
                 return False
         return False
 
-    def test_chat_history(self):
-        """Test chat history endpoint (requires auth)"""
+    def test_chat_threads(self):
+        """Test chat threads endpoint (requires auth)"""
         success, response = self.run_test(
-            "Chat History",
+            "Chat Threads",
             "GET",
-            "api/chat/history",
+            "api/chat/threads",
             200,
             use_session=True
         )
         
         if success:
             if isinstance(response, list):
-                print(f"✅ Chat history response is a list with {len(response)} items")
+                print(f"✅ Chat threads response is a list with {len(response)} items")
                 return True
             else:
-                print(f"❌ Chat history response is not a list: {response}")
+                print(f"❌ Chat threads response is not a list: {response}")
                 return False
         return False
 
@@ -299,6 +301,20 @@ class SarvbhasaAPITester:
                 print(f"❌ Payment checkout response structure is incorrect: {response}")
                 return False
         return False
+
+    def test_google_auth_endpoint(self):
+        """Test Google OAuth endpoint exists and requires session_id"""
+        test_data = {
+            "session_id": "test_session_id"
+        }
+        success, response = self.run_test(
+            "Google OAuth Endpoint",
+            "POST",
+            "api/auth/google",
+            401,  # Should return 401 for invalid session
+            data=test_data
+        )
+        return success
 
     def test_unauthenticated_endpoints(self):
         """Test endpoints that should require authentication"""
@@ -345,7 +361,8 @@ def main():
         ("Translate API", tester.test_translate_endpoint),
         ("Chat API", tester.test_chat_endpoint),
         ("Translation History", tester.test_translation_history),
-        ("Chat History", tester.test_chat_history),
+        ("Google OAuth Endpoint", tester.test_google_auth_endpoint),
+        ("Chat Threads", tester.test_chat_threads),
         ("Payment Checkout", tester.test_payment_checkout),
         ("Logout", tester.test_logout),
         ("Unauthenticated Access", tester.test_unauthenticated_endpoints)
