@@ -1,49 +1,59 @@
 # Sarvbhasa - India's Sovereign AI Platform
 
 ## Problem Statement
-Build a landing page for "Sarvbhasa" with topbar navigation (Platform dropdown with blur overlay), hero section, 2-second loading animation, and simple chatbot interface.
+Build a complete multilingual AI platform with landing page, loading animation, and full-featured main app with chatbot, text translation, speech-to-text, sign-in, and collapsible sidebar.
 
 ## Architecture
 - **Frontend**: React + Tailwind CSS + Framer Motion + Shadcn UI
 - **Backend**: FastAPI + MongoDB
 - **Fonts**: Outfit (headings), Manrope (body)
-- **Colors**: White, Saffron (#FF9933), India Green (#138808), Zinc palette
+- **Colors**: White, Saffron (#FF9933), India Green (#138808)
 
 ## User Personas
-- Developers exploring Indian language AI APIs
-- General users wanting multilingual AI translation
+- Developers building with Indian language AI APIs
+- General users wanting multilingual translation
+- Users needing speech-to-text in Indian languages
 
 ## Core Requirements
-- Landing page with glassmorphic topbar
-- Platform dropdown with blur overlay (About API + Languages)
-- Hero section with bold headline and CTA
+- Landing page with Platform dropdown, hero section, Hindi tagline
 - 2-second loading animation transition
-- Simple chatbot interface
+- Collapsible sidebar with full navigation
+- Multilingual AI Chatbot with language selector
+- Text to Text Translation (source/target language selection)
+- Speech to Text (browser Web Speech API)
+- Sign In (Google, Telegram, X/Twitter, Email)
+- User profile with Logout and Support/Help
 
 ## What's Been Implemented (Dec 2025)
-- [x] Landing page with Topbar, Hero Section
-- [x] Platform dropdown with blur overlay and expandable items
+- [x] Landing page with topbar, Platform dropdown, blur overlay
+- [x] Hindi tagline: भाषा बदले, मतलब नहीं
 - [x] Loading animation (2s) with tricolor progress bar
-- [x] Simple chatbot interface (MOCKED responses)
-- [x] Backend /api/chat endpoint with MongoDB logging
-- [x] State management: landing -> loading -> chatbot views
-- [x] Framer Motion animations throughout
+- [x] Collapsible sidebar: Home, New Chat, Chat, Translate, Speech, Upgrade, Sign In
+- [x] Multilingual AI Chatbot with language selector + mic + translate button
+- [x] Text to Text Translate with language dropdowns, swap, copy, speak
+- [x] Speech to Text with browser Web Speech API (real mic recording)
+- [x] Sign In modal (Google, Telegram, X, Email) - localStorage mock auth
+- [x] User profile dropdown: Logout, Support (Indian phone number)
+- [x] Backend: /api/chat, /api/translate endpoints (MOCKED responses)
+- [x] All tests passing 100%
+
+## MOCKED Features (need real backend integration)
+- Chat responses (random predefined)
+- Text translation (lookup table + fallback format)
+- Sign in (localStorage, no real OAuth)
 
 ## Prioritized Backlog
 ### P0 (Critical)
-- Integrate real Sarvam Maurya API for actual translations
+- Integrate real Sarvam Maurya API for translation + chat
+- Real Google OAuth sign in
 
 ### P1 (Important)
-- Language selection in chatbot
-- Translation history persistence
-- Mobile responsive polish
+- Chat history persistence in MongoDB
+- Real speech-to-text via Sarvam API
+- Translation history per user
 
 ### P2 (Nice to have)
-- Text-to-speech for translations
-- Dark mode toggle
-- User authentication
-
-## Next Tasks
-1. Integrate Sarvam Maurya API for real translation
-2. Add language selector in chatbot
-3. Mobile responsive improvements
+- Stripe payment for Premium upgrade
+- Dark mode
+- Mobile responsive polish
+- More languages support
