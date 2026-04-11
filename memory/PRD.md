@@ -1,32 +1,30 @@
 # Sarvbhasa - India's Sovereign AI Platform
 
-## Problem Statement
-Complete multilingual AI platform with custom JWT auth, Stripe payments, real Sarvam API translation, chat/translation history, and tricolor theme.
-
 ## Architecture
 - Frontend: React + Tailwind + Framer Motion + Shadcn UI
-- Backend: FastAPI + MongoDB + Sarvam AI API + Stripe (emergentintegrations)
-- Auth: Custom JWT (email/password) + httpOnly cookies + brute force protection
+- Backend: FastAPI + MongoDB + Sarvam AI API + Stripe
+- Auth: Custom JWT (email/password) + Google OAuth (popup) + httpOnly cookies
 - Payments: Stripe Checkout (₹499/month Premium)
 
-## What's Been Implemented (Dec 2025)
-- [x] Landing page with tricolor CTA, Hindi tagline
-- [x] 2-second loading animation
-- [x] Custom JWT auth (register/login with Sign In + Create Account tabs)
-- [x] Social login buttons (Google, X/Twitter, Telegram) - visual placeholders
-- [x] Real Sarvam Maurya API translation (12+ languages)
-- [x] Chat with source→target language translation
+## Implemented (Dec 2025)
+- [x] Landing page: tricolor gradient CTA, Hindi tagline, Platform dropdown
+- [x] 2-second loading animation with tricolor progress bar
+- [x] Custom JWT auth: Sign In + Create Account tabs, email/password
+- [x] Google OAuth: popup-based (opens Google consent, callback via postMessage)
+- [x] Twitter/Telegram social buttons (visual placeholders)
+- [x] Real Sarvam Maurya API translation (10+ Indian languages)
+- [x] Chat with conversation threads (create, load, delete threads)
+- [x] Chat history sidebar grouped by date (Today/Yesterday/date)
 - [x] Text to Text Translate with swap, copy, speak
 - [x] Speech to Text (browser Web Speech API)
 - [x] Stripe payment checkout for Premium (₹499/month)
-- [x] Chat history persistence per user (MongoDB)
 - [x] Translation history dashboard with search
-- [x] User profile with Logout + Support (Indian phone number)
-- [x] Upgrade to Premium page with pricing
-- [x] Language-specific cultural background images (less blurred)
-- [x] No Emergent branding
+- [x] User profile: avatar, Logout, Support (Indian phone number)
+- [x] Upgrade page: Free vs Premium tiers
+- [x] Language-specific cultural background images (subtle blur)
+- [x] No Emergent branding anywhere
 - [x] Tricolor theme throughout
-- [x] Admin seeded (admin@sarvbhasa.com)
+- [x] All tests 100%
 
 ## Credentials
 - Admin: admin@sarvbhasa.com / Sarvbhasa@123
