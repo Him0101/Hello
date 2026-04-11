@@ -15,7 +15,9 @@ code {
 
 /* Hide Made with Emergent badge */
 a#emergent-badge,
-#emergent-badge {
+#emergent-badge,
+[id*="emergent"],
+a[href*="emergent"] {
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
@@ -25,6 +27,7 @@ a#emergent-badge,
     height: 0 !important;
     overflow: hidden !important;
     pointer-events: none !important;
+    clip: rect(0,0,0,0) !important;
 }
 
 @layer base {

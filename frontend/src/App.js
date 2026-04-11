@@ -12,6 +12,18 @@ function App() {
   const [currentView, setCurrentView] = useState("landing");
   const [user, setUser] = useState(null);
 
+  // Hide any external badge
+  useEffect(() => {
+    const hide = () => {
+      const badge = document.getElementById("emergent-badge");
+      if (badge) badge.remove();
+    };
+    hide();
+    const observer = new MutationObserver(hide);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   // Check for payment redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
