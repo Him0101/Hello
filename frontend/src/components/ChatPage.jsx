@@ -97,7 +97,7 @@ export default function ChatPage({ user }) {
     try {
       const r = await fetch(`${API}/chat`, {
         method: "POST", headers: { "Content-Type": "application/json" }, credentials: "include",
-        body: JSON.stringify({ message: text, language: sourceLang, target_language: targetLang, thread_id: activeThreadId }),
+        body: JSON.stringify({ message: text, source_language: sourceLang, target_language: targetLang, thread_id: activeThreadId }),
       });
       const data = await r.json();
       setMessages((prev) => [...prev, { id: (Date.now() + 1).toString(), role: "assistant", content: data.content }]);

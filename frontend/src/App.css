@@ -4,12 +4,8 @@
   0%, 100% { opacity: 0.4; transform: translateX(0); }
   50% { opacity: 1; transform: translateX(6px); }
 }
+.animate-pulse-arrow { animation: pulse-arrow 1s ease-in-out infinite; }
 
-.animate-pulse-arrow {
-  animation: pulse-arrow 1s ease-in-out infinite;
-}
-
-/* Tricolor gradient accent bar */
 .tricolor-bar {
   background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 35%, #FFFFFF 65%, #138808 100%);
 }
@@ -18,16 +14,35 @@
   background: linear-gradient(135deg, rgba(255,153,51,0.06) 0%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0.9) 60%, rgba(19,136,8,0.06) 100%);
 }
 
-/* Language background image styling */
 .lang-bg-image {
+  position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%;
+  opacity: 0.18; filter: blur(1px);
+  transition: opacity 0.5s ease; pointer-events: none; z-index: 0;
+}
+
+/* Wavy tricolor background for translate & speech pages */
+.wavy-tricolor-bg {
+  position: relative;
+  overflow: hidden;
+}
+.wavy-tricolor-bg::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  opacity: 0.18;
-  filter: blur(1px);
-  transition: opacity 0.5s ease, filter 0.5s ease;
+  top: -30%; left: -10%; width: 120%; height: 160%;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 20%, rgba(255,153,51,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 90% 80%, rgba(19,136,8,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 30% at 50% 10%, rgba(255,255,255,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 30% 90%, rgba(0,100,200,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.wavy-tricolor-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0; height: 200px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FF9933' fill-opacity='0.06' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,218.7C672,235,768,245,864,229.3C960,213,1056,171,1152,154.7C1248,139,1344,149,1392,154.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3Cpath fill='%23138808' fill-opacity='0.05' d='M0,288L48,272C96,256,192,224,288,208C384,192,480,192,576,197.3C672,203,768,213,864,229.3C960,245,1056,267,1152,261.3C1248,256,1344,224,1392,208L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom center;
+  background-size: cover;
   pointer-events: none;
   z-index: 0;
 }
