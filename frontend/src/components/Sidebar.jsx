@@ -118,3 +118,4 @@ export default function Sidebar({ expanded, onToggle, activePage, onNavigate, us
     </aside>
   );
 }
+

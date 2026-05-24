@@ -1,89 +1,96 @@
+
 import { useState, useEffect, useCallback } from "react";
 import "@/App.css";
 import Topbar from "@/components/Topbar";
 import HeroSection from "@/components/HeroSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import MainApp from "@/components/MainApp";
+import AuthModal from "@/components/AuthModal";
 import { AnimatePresence } from "framer-motion";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./firebase";
 
 function App() {
   const [currentView, setCurrentView] = useState("landing");
   const [user, setUser] = useState(null);
+  const [showAuth, setShowAuth] = useState(false);
 
-  // Hide external badge
+  // 🔐 track auth
   useEffect(() => {
-    const hide = () => { const b = document.getElementById("emergent-badge"); if (b) b.remove(); };
-    hide();
-    const obs = new MutationObserver(hide);
-    obs.observe(document.body, { childList: true, subtree: true });
-    return () => obs.disconnect();
-  }, []);
-
-  // Check payment redirect
-  useEffect(() => {
-    const p = new URLSearchParams(window.location.search);
-    if (p.get("session_id")) setCurrentView("app");
-  }, []);
-
-  // Check existing session
-  useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch(`${BACKEND_URL}/api/auth/me`, { credentials: "include" });
-        if (r.ok) setUser(await r.json());
-      } catch {}
-    })();
-  }, []);
-
-  // Listen for Google OAuth popup callback
-  useEffect(() => {
-    const handler = async (e) => {
-      if (e.data?.type === "google-auth-callback" && e.data?.session_id) {
-        try {
-          const r = await fetch(`${BACKEND_URL}/api/auth/google`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ session_id: e.data.session_id }),
-          });
-          if (r.ok) {
-            const userData = await r.json();
-            setUser(userData);
-            setCurrentView("app");
-          }
-        } catch {}
+    const unsub = onAuthStateChanged(auth, (u) => {
+      if (u) {
+        setUser({
+          uid: u.uid,
+          email: u.email,
+          name: u.displayName
+        });
+      } else {
+        setUser(null);
       }
-    };
-    window.addEventListener("message", handler);
-    return () => window.removeEventListener("message", handler);
+    });
+
+    return () => unsub();
   }, []);
 
+  // 🚀 EXPERIENCE BUTTON → SHOW LOADING FIRST
   const handleExperience = useCallback(() => {
     setCurrentView("loading");
-    setTimeout(() => setCurrentView("app"), 2000);
+
+    // simulate loading delay
+    setTimeout(() => {
+      setCurrentView("app");
+    }, 1800); // match your loading animation
   }, []);
 
+  // 🚪 logout
   const handleLogout = useCallback(async () => {
-    try { await fetch(`${BACKEND_URL}/api/auth/logout`, { method: "POST", credentials: "include" }); } catch {}
+    await signOut(auth);
     setUser(null);
   }, []);
 
   return (
     <div className="min-h-screen bg-white">
+
       <AnimatePresence mode="wait">
+
         {currentView === "landing" && (
           <div key="landing">
             <Topbar onExperience={handleExperience} />
             <HeroSection onExperience={handleExperience} />
           </div>
         )}
-        {currentView === "loading" && <LoadingScreen key="loading" />}
+
+        {/* 🆕 LOADING SCREEN */}
+        {currentView === "loading" && (
+          <LoadingScreen key="loading" />
+        )}
+
         {currentView === "app" && (
-          <MainApp key="app" onBack={() => setCurrentView("landing")} user={user} setUser={setUser} onLogout={handleLogout} />
+          <MainApp
+            key="app"
+            user={user}
+            setUser={setUser}
+            onLogout={handleLogout}
+            onOpenAuth={() => setShowAuth(true)}
+          />
+        )}
+
+      </AnimatePresence>
+
+      {/* AUTH MODAL */}
+      <AnimatePresence>
+        {showAuth && (
+          <AuthModal
+            onClose={() => setShowAuth(false)}
+            onSuccess={(u) => {
+              setUser(u);
+              setShowAuth(false);
+            }}
+          />
         )}
       </AnimatePresence>
+
     </div>
   );
 }

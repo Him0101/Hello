@@ -1,17 +1,31 @@
+
+
+
 <!DOCTYPE html>
-<html><head><title>Signing in...</title></head>
+<html>
 <body>
 <script>
-  // Extract session_id from hash
-  var hash = window.location.hash;
-  var match = hash.match(/session_id=([^&]+)/);
+  const hash = window.location.hash;
+  const match = hash.match(/session_id=([^&]+)/);
+
   if (match && match[1]) {
-    // Send session_id to parent window
+    const session_id = match[1];
+
+    // 🔥 STORE LOGIN LOCALLY (TEMP SOLUTION)
+    localStorage.setItem("user", JSON.stringify({
+      name: "Google User",
+      email: "logged@google.com",
+      session_id: session_id
+    }));
+
+    // notify app
     if (window.opener) {
-      window.opener.postMessage({ type: "google-auth-callback", session_id: match[1] }, "*");
+      window.opener.postMessage({ type: "google-auth-success" }, "*");
     }
   }
+
   window.close();
 </script>
-<p style="font-family:sans-serif;text-align:center;margin-top:40px;color:#666">Signing you in...</p>
-</body></html>
+</body>
+</html>
+
